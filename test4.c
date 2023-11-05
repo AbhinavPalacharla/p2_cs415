@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
+#include <time.h>
 
 int *pids;
-int iters[3] = {5, 3, 8};
+// int iters[3] = {10, 6, 16};
+int iters[3] = {80, 80, 80};
 int N = 3;
 int first = 1;
 int waiting = 0;
@@ -64,15 +66,23 @@ int main(int argc, char **argv) {
         pids[i] = fork();
 
         if(pids[i] == 0) {
-            printf("(%d) Waiting...\n", getpid());
             int j = 0;
+            struct timespec ts;
+            ts.tv_sec = 0;
+            ts.tv_nsec = 100000000;
+            // ts.tv_nsec = 500000000;
+            
+            printf("(%d) Waiting...\n", getpid());
             // kill(getppid(), SIGUSR2);
 
             if(sigwait(&set, &sig) == 0) {
                 while((j++) < iters[i]) {
                     printf("(%d) Process Executing... (%d/%d)\n", getpid(), j, iters[i]);
-                    sleep(1);
+                    //sleep for half a second
+                    
+                    nanosleep(&ts, NULL);
                 }
+                printf("(%d) Process Finished.\n", getpid());
 
                 exit(0);
             }
@@ -85,6 +95,7 @@ int main(int argc, char **argv) {
 
     // while(waiting < N);
     sleep(2);
+    printf("\n");
 
     kill(pids[0], SIGCONT);
     alarm(2);

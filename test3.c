@@ -4,7 +4,6 @@
 #include <signal.h>
 
 int *pids;
-int iters[3] = {5, 3, 8};
 int N = 3;
 int first = 1;
 int waiting = 0;
@@ -21,22 +20,27 @@ void rotate_pids() {
 
 void print_pids() {
     printf("\n/// PIDS: ");
+    fflush(stdin);
     for(int i = 0; i < N; i++) {
         printf("%d ", pids[i]);
+        fflush(stdin);
     }
 
     printf("///\n");
+    fflush(stdin);
 }
 
 void sigalrm_handler(int sig) {
     //stop running process
     kill(pids[0], SIGSTOP);
     printf("\n(OS) >>> (%d) Process Stopped.\n", pids[0]);
+    fflush(stdin);
     
     //rotate pids
     rotate_pids();
 
     printf("\n(OS) >>> (%d) Process Started.\n\n", pids[0]);
+    fflush(stdin);
     //resume next process
     kill(pids[0], SIGCONT);
 
@@ -65,12 +69,13 @@ int main(int argc, char **argv) {
 
         if(pids[i] == 0) {
             printf("(%d) Waiting...\n", getpid());
-            int j = 0;
+            fflush(stdin);
             // kill(getppid(), SIGUSR2);
 
             if(sigwait(&set, &sig) == 0) {
-                while((j++) < iters[i]) {
-                    printf("(%d) Process Executing... (%d/%d)\n", getpid(), j, iters[i]);
+                while(1) {
+                    printf("(%d) Process Executing...\n", getpid());
+                    fflush(stdin);
                     sleep(1);
                 }
 
@@ -79,12 +84,13 @@ int main(int argc, char **argv) {
         }
         else if(pids[i] < 0) {
             printf("Error creating child process.\n");
+            fflush(stdin);
             exit(1);
         }
     }
 
     // while(waiting < N);
-    sleep(2);
+    // sleep(2);
 
     kill(pids[0], SIGCONT);
     alarm(2);
