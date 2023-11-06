@@ -5,13 +5,16 @@
 #include <time.h>
 
 #define N 3
+#define QUANTUM 5
 
 int *pids;
-int iters[N] = {27, 17, 37};
+// int iters[N] = {27, 17, 37}; //2.7 sec, 1.7 sec, 3.7 sec QUANTUM 2
+int iters[N] = {80, 30, 130}; //QUANTUM 5
 int proc_status[N] = {0, 0, 0};
 // int iters[3] = {80, 80, 80};
 int first = 1;
 int waiting = 0;
+int proc_finished_count = 0;
 
 void rotate_pids() {
     int temp = pids[0];
@@ -39,6 +42,11 @@ void print_processes() {
 }
 
 void sigalrm_handler(int sig) {
+    if(proc_finished_count == N) {
+        printf("All processes finished, skipping alarm.\n");
+        return;
+    }
+
     printf("In alarm handler...\n");
     
     //print processes
@@ -51,17 +59,22 @@ void sigalrm_handler(int sig) {
     // // rotate pids
     // rotate_pids();
 
+    printf("Rotating pids...\n");
+
     //rotate pids until we find a process that hasn't finished
     do {
         rotate_pids();
-    } while(proc_status[0] == 1);
+    } while(proc_status[0] == 1); //This loop will never end if all processes have finished FIX THIS
+
+    //print processes
+    print_processes();
 
     printf("\n(OS) >>> (ID: %d) (STAT: %d) (IT: %d) Process Started.\n", pids[0], proc_status[0], iters[0]);
 
     //resume next process
     kill(pids[0], SIGCONT);
 
-    alarm(2);
+    alarm(QUANTUM);
 }
 
 void sigchld_handler(int sig) {
@@ -77,7 +90,8 @@ void sigchld_handler(int sig) {
             printf("\n\n(SIGCHLHAND) >>> Process Finished: %d\n\n", child_pid);
             for(int i = 0; i < N; i++) {
                 if(pids[i] == child_pid) {
-                    proc_status[0] = 1;
+                    proc_status[0] = 1; //Mark process as finished
+                    proc_finished_count++;
                     break;
                 }
             }
@@ -88,7 +102,9 @@ void sigchld_handler(int sig) {
             //reset alarm
             unsigned int alarm_left = alarm(0);
             printf("Alarm left: %d\n", alarm_left);
-            alarm(2);
+            // alarm(QUANTUM);
+            sigalrm_handler(0);
+            printf("Alarm set to 2...\n");
         }
     }
 }
@@ -125,7 +141,7 @@ int main(int argc, char **argv) {
             // kill(getppid(), SIGUSR2);
 
             if(sigwait(&set, &sig) == 0) {
-                printf("(%d) Doing Stuff...\n", getpid());
+                // printf("(%d) Doing Stuff...\n", getpid());
                 while((j++) < iters[i]) {
                     printf("(%d) Process Executing... (%d/%d)\n", getpid(), j, iters[i]);
 
@@ -150,12 +166,17 @@ int main(int argc, char **argv) {
 
     printf("(OS) >>> (ID: %d) (STAT: %d) (IT: %d) Process Started.\n", pids[0], proc_status[0], iters[0]);
     kill(pids[0], SIGCONT);
-    alarm(2);
+    alarm(QUANTUM);
+
+    printf("Before wait...\n");
 
     //wait for processes to finish
     for(int i = 0; i < N; i++) {
+        // waitpid(pids[i], NULL, 0);
         wait(NULL);
     }
+
+    printf("All processes finished.\n");
 
     free(pids);
 
