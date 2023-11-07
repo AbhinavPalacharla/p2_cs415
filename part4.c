@@ -102,15 +102,6 @@ void next_process() {
     current_process = (current_process + 1) % N;
 }
 
-void print_processes() {
-    printf("\n------- PROCESSES: -------\n");
-    for(int i = 0; i < N; i++) {
-        printf("(%d) | STAT: %d\n", processes[i].pid, processes[i].status);
-    }
-
-    printf("--------------------------\n");
-}
-
 void removeSubstring(char *str, const char *sub) {
     int len = strlen(sub);
     while ((str = strstr(str, sub))) {
@@ -119,7 +110,7 @@ void removeSubstring(char *str, const char *sub) {
 }
 
 void processes_status_overview() {
-    printf("\n------- PROCESSES: -------\n\n");
+    printf("\n------- PROCESSES: --------------------------------------------------------------------------------------------------\n\n");
     for(int i = 0; i < N; i++) {
         if(processes[i].status == 1) {continue;}
 
@@ -185,7 +176,7 @@ void processes_status_overview() {
         // printf("| NON VOLUNTARY CTX SWITCHES: 0\n\n");
     }
 
-    printf("--------------------------\n");
+    printf("--------------------------------------------------------------------------------------------------------------------\n\n");
 }
 
 void sigusr2_handler() {
@@ -216,7 +207,7 @@ void sigalrm_handler() {
         // printf("Status: %d\n", status);
         if(WIFEXITED(status)) {
             printf("(OS) >>> (ID: %d) Process Finished.\n", processes[current_process].pid);
-            printf("(OS) >>> %d Processes Remaining.\n\n", numRunning);
+            printf("(OS) >>> %d Processes Remaining.\n\n", numRunning - 1);
             
             processes[current_process].status = 1;
             numRunning--;
