@@ -145,7 +145,9 @@ void sigalrm_handler() {
     } while(processes[current_process].status == 1);
 
     //start next process
-    printf("\n\n(OS) >>> (ID: %d) Process Resumed.\n\n", processes[current_process].pid);
+    // printf("\n\n(OS) >>> (ID: %d) Process Resumed.\n\n", processes[current_process].pid);
+    printf("\n(OS) >>> (ID: %d) (CMD: %s) Process Started.\n\n", processes[current_process].pid, processes[current_process].command[0]);
+
     kill(processes[current_process].pid, SIGCONT);
 
     alarm(QUANTUM);
@@ -237,7 +239,7 @@ int main() {
 
     // while(waiting < N);
 
-    printf("\n(OS) >>> (ID: %d) Process Started.\n\n", processes[current_process].pid);
+    printf("\n(OS) >>> (ID: %d) (CMD: %s) Process Started.\n\n", processes[current_process].pid, processes[current_process].command[0]);
 
     kill(processes[current_process].pid, SIGCONT);
 
