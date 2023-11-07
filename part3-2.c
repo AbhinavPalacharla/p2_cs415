@@ -128,6 +128,7 @@ void sigalrm_handler() {
     //check if current process is finished
     int status;
     pid_t child_pid = waitpid(processes[current_process].pid, &status, WNOHANG);
+    printf("Child PID: %d\n", child_pid);
 
     if(child_pid != 0) {
         if(WIFEXITED(status)) {
