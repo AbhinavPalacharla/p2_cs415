@@ -116,16 +116,12 @@ void processes_status_overview() {
         char *fpath;
         asprintf(&fpath, "/proc/%d/status", processes[i].pid);
 
-        // printf("fpath: %s\n", fpath);
-
         FILE *f; 
         
         if((f = fopen(fpath, "r")) == NULL) {
             printf("Error opening file: %s\n", fpath);
             exit(1);
         }
-
-        // FILE *f = fopen("/proc/1/status", "r");
 
         char *line = NULL;
         size_t len = 128;
@@ -169,10 +165,6 @@ void processes_status_overview() {
         fclose(f);
 
         free(fpath);
-        // printf("PROC (ID: %d) (STAT: ) | STATE: I (idle) ", processes[i].pid, processes[i].status);
-        // printf("| THREADS: 0 ");
-        // printf("| VOLUNTARY CTX SWITCHES: 0 ");
-        // printf("| NON VOLUNTARY CTX SWITCHES: 0\n\n");
     }
 
     printf("---------------------------------------------------------------------------------------------------------------------------------------\n\n");
