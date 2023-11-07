@@ -6,7 +6,6 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <sys/types.h>
-#include <assert.h>
 
 typedef struct {
     char** command_list;
@@ -129,8 +128,7 @@ void sigalrm_handler() {
     //check if current process is finished
     int status;
     pid_t child_pid = waitpid(processes[current_process].pid, &status, WNOHANG);
-    // printf("(OS) >>> C_PID: %d\n", child_pid);
-    assert(child_pid);
+    printf("(OS) >>> C_PID: %d\n", child_pid);
 
     if(child_pid != 0) {
         if(WIFEXITED(status)) {
