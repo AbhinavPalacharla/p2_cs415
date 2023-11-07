@@ -115,7 +115,7 @@ void processes_status_overview() {
     printf("\n------- PROCESSES: -------\n\n");
     for(int i = 0; i < N; i++) {
         if(processes[i].status == 1) {continue;}
-        
+
         char *fpath;
         asprintf(&fpath, "/proc/%d/status", processes[i].pid);
 
@@ -143,6 +143,7 @@ void processes_status_overview() {
             if(strncmp(line, "State:", 6) == 0) {
                 state = malloc(sizeof(char) * (strlen(line) + 1));
                 strcpy(state, line);
+                state[strlen(state) - 1] = '\0';
             } else if(strncmp(line, "Threads:", 8) == 0) {
                 threads = atoi(line + 9);
             } else if(strncmp(line, "voluntary_ctxt_switches:", 24) == 0) {
