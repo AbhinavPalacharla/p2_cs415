@@ -194,7 +194,7 @@ int main() {
 
         processes[i].command[cl->num_token] = NULL;
 
-        free(cl);
+        free_command_line(cl);
     }
 
 
