@@ -166,7 +166,7 @@ void sigalrm_handler() {
 int main() {
     FILE *f = fopen("input.txt", "r");
 
-    char *line = NULL; size_t len = 0; ssize_t read;
+    size_t len = 128; char *line = malloc(sizeof(char) * len);  ssize_t read;
     
     for(; (read = getline(&line, &len, f)) != -1; N++);
 
@@ -215,7 +215,7 @@ int main() {
     /*************************************************/
 
     for(int i = 0; i < N; i++) {
-        char *line = NULL; size_t len = 0;
+        size_t len = 128; char *line = malloc(sizeof(char) * len); 
 
         getline(&line, &len, f);
         command_line cl = str_filler(line, " ");
