@@ -158,7 +158,7 @@ void processes_status_overview() {
 
         fclose(f);
 
-        free(fpath);
+        // free(fpath);
         // printf("PROC (ID: %d) (STAT: ) | STATE: I (idle) ", processes[i].pid, processes[i].status);
         // printf("| THREADS: 0 ");
         // printf("| VOLUNTARY CTX SWITCHES: 0 ");
