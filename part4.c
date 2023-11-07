@@ -117,6 +117,8 @@ void processes_status_overview() {
         char *fpath;
         asprintf(&fpath, "/proc/%d/status", processes[i].pid);
 
+        printf("fpath: %s\n", fpath);
+
         FILE *f = fopen(fpath, "r");
 
         printf("Here");
