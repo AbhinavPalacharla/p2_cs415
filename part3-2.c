@@ -131,6 +131,7 @@ void sigalrm_handler() {
 
     if(child_pid != 0) {
         printf("Child PID != 0 | (%d)\n", child_pid);
+        printf("Status: %d\n", status);
         if(WIFEXITED(status)) {
             printf("(OS) >>> (ID: %d) Process Finished.", processes[current_process].pid);
             
