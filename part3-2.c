@@ -170,6 +170,8 @@ int main() {
     
     for(; (read = getline(&line, &len, f)) != -1; N++);
 
+    free(line);
+
     fclose(f);
 
     processes = malloc(sizeof(Process) * N);
@@ -250,6 +252,7 @@ int main() {
         }
 
         free_command_line(&cl);
+        free(line);
     }
     /************************************************/
 
