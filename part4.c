@@ -111,6 +111,13 @@ void print_processes() {
     printf("--------------------------\n");
 }
 
+void removeSubstring(char *str, const char *sub) {
+    int len = strlen(sub);
+    while ((str = strstr(str, sub))) {
+        memmove(str, str + len, strlen(str + len) + 1);
+    }
+}
+
 void processes_status_overview() {
     printf("\n------- PROCESSES: -------\n\n");
     for(int i = 0; i < N; i++) {
@@ -144,6 +151,7 @@ void processes_status_overview() {
             if(strncmp(line, "Name:", 5) == 0) {
                 name = malloc(sizeof(char) * (strlen(line) + 1));
                 strcpy(name, line);
+                removeSubstring(name, "Name:\t");
                 name[strlen(name) - 1] = '\0';
             } else if(strncmp(line, "State:", 6) == 0) {
                 state = malloc(sizeof(char) * (strlen(line) + 1));
