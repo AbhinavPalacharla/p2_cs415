@@ -254,6 +254,9 @@ int main() {
         free_command_line(&cl);
         free(line);
     }
+
+    fclose(f);
+
     /************************************************/
 
     //setup all processes status
