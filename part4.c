@@ -156,6 +156,7 @@ void processes_status_overview() {
             } else if(strncmp(line, "State:", 6) == 0) {
                 state = malloc(sizeof(char) * (strlen(line) + 1));
                 strcpy(state, line);
+                removeSubstring(state, "State:\t");
                 state[strlen(state) - 1] = '\0';
             } else if(strncmp(line, "Threads:", 8) == 0) {
                 threads = atoi(line + 9);
