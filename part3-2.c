@@ -92,7 +92,7 @@ int waiting = 0;
 typedef struct Process {
     int pid;
     int status;
-    command_line *command;
+    char **command;
 } Process;
 
 Process *processes = NULL;
@@ -171,7 +171,17 @@ int main() {
     for(int i = 0; (getline(&line, &len, f) != -1); i++) {
         command_line *cl = malloc(sizeof(command_line));
         *cl = str_filler(line, " "); // fill command list
-        memcpy(processes[i].command, cl, sizeof(command_line));
+        // memcpy(processes[i].command, cl, sizeof(command_line));
+
+        processes[i].command = malloc(sizeof(char*) * (cl->num_token + 1));
+        
+        for(int j = 0; j < cl->num_token; j++) {
+            processes[i].command[j] = malloc(sizeof(char) * (strlen(cl->command_list[j]) + 1));
+            strcpy(processes[i].command[j], cl->command_list[j]);
+        }
+
+        processes[i].command[cl->num_token] = NULL;
+
         free(cl);
     }
 
@@ -201,8 +211,13 @@ int main() {
             kill(getppid(), SIGUSR2);
 
             if(sigwait(&set, &sig) == 0) {
-                if(execvp(processes[i].command->command_list[0], processes[i].command->command_list) != 0) {
-                    printf("Error executing command: %s\n", processes[i].command->command_list[0]);
+                // if(execvp(processes[i].command->command_list[0], processes[i].command->command_list) != 0) {
+                //     printf("Error executing command: %s\n", processes[i].command->command_list[0]);
+                //     exit(1);
+                // }
+
+                if(execvp(processes[i].command[0], processes[i].command) != 0) {
+                    printf("Error executing command: %s\n", processes[i].command[0]);
                     exit(1);
                 }
             }
@@ -220,7 +235,7 @@ int main() {
 
     /************************************************/
 
-    while(waiting < N);
+    // while(waiting < N);
 
     printf("\n(OS) >>> (ID: %d) Process Started.\n\n", processes[current_process].pid);
 
@@ -236,8 +251,18 @@ int main() {
 
     printf("\n\n(OS) >>> ALL PROCESSES FINISHED.\n\n");
 
+    // for(int i = 0; i < N; i++) {
+    //     free_command_line(processes[i].command);
+    // }
+
+    // free(processes);
+
     for(int i = 0; i < N; i++) {
-        free_command_line(processes[i].command);
+        for(int j = 0; processes[i].command[j] != NULL; j++) {
+            free(processes[i].command[j]);
+        }
+
+        free(processes[i].command);
     }
 
     free(processes);
