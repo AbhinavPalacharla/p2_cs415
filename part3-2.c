@@ -138,6 +138,7 @@ void sigalrm_handler() {
             
             processes[current_process].status = 1;
             numRunning--;
+            printf("Num Running: %d\n", numRunning);
         }
     }
 
