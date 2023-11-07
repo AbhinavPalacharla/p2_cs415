@@ -158,11 +158,12 @@ void processes_status_overview() {
             }
         }
 
-        printf("PROC (ID: %d) (STAT: %d) (CMD: %s) | STATE: %s ", processes[i].pid, processes[i].status, state);
+        printf("PROC (ID: %d) (STAT: %d) (CMD: %s) | STATE: %s ", processes[i].pid, processes[i].status, name, state);
         printf("| THREADS: %d ", threads);
         printf("| VOLUNTARY CTX SWITCHES: %d ", voluntary_ctxt_switches);
         printf("| NON VOLUNTARY CTX SWITCHES: %d\n\n", nonvoluntary_ctxt_switches);
 
+        free(name);
         free(state);
         free(line);
 
