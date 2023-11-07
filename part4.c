@@ -134,13 +134,18 @@ void processes_status_overview() {
         size_t len = 128;
         ssize_t read;
 
+        char *name;
         char *state = NULL;
         int threads = 0;
         int voluntary_ctxt_switches = 0;
         int nonvoluntary_ctxt_switches = 0;
 
         while((read = getline(&line, &len, f)) != -1) {
-            if(strncmp(line, "State:", 6) == 0) {
+            if(strncmp(line, "Name:", 5) == 0) {
+                name = malloc(sizeof(char) * (strlen(line) + 1));
+                strcpy(name, line);
+                name[strlen(name) - 1] = '\0';
+            } else if(strncmp(line, "State:", 6) == 0) {
                 state = malloc(sizeof(char) * (strlen(line) + 1));
                 strcpy(state, line);
                 state[strlen(state) - 1] = '\0';
@@ -153,7 +158,7 @@ void processes_status_overview() {
             }
         }
 
-        printf("PROC (ID: %d) (STAT: ) | STATE: %s ", processes[i].pid, state);
+        printf("PROC (ID: %d) (STAT: %d) (CMD: %s) | STATE: %s ", processes[i].pid, processes[i].status, state);
         printf("| THREADS: %d ", threads);
         printf("| VOLUNTARY CTX SWITCHES: %d ", voluntary_ctxt_switches);
         printf("| NON VOLUNTARY CTX SWITCHES: %d\n\n", nonvoluntary_ctxt_switches);
