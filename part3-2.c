@@ -139,6 +139,9 @@ void sigalrm_handler() {
             processes[current_process].status = 1;
             numRunning--;
             printf("Num Running: %d\n", numRunning);
+            if(numRunning == 0) {
+                return;
+            }
         }
     }
 
@@ -155,7 +158,9 @@ void sigalrm_handler() {
 
     kill(processes[current_process].pid, SIGCONT);
 
-    alarm(QUANTUM);
+    if (numRunning > 0) {
+        alarm(QUANTUM);
+    }
 }
 
 int main() {
