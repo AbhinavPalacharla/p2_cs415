@@ -211,7 +211,7 @@ int main() {
         processes[i].pid = fork();
 
         if(processes[i].pid == 0) {
-            printf("(PROC: %d) >>  Waiting...\n", getpid());
+            // printf("(PROC: %d) >>  Waiting...\n", getpid());
 
             kill(getppid(), SIGUSR2);
 
