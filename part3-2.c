@@ -137,6 +137,7 @@ void sigalrm_handler() {
             printf("(OS) >>> (ID: %d) Process Finished.", processes[current_process].pid);
             
             processes[current_process].status = 1;
+            numRunning--;
         }
     }
 
@@ -238,6 +239,8 @@ int main() {
         processes[i].status = 0;
     }
 
+    numRunning = N;
+
     /************************************************/
 
     // while(waiting < N);
@@ -250,14 +253,19 @@ int main() {
 
     /************************************************/
 
-    for(int i = 0; i < N; i++) {
+    // for(int i = 0; i < N; i++) {
         // waitpid(processes[i].pid, NULL, 0);
-        wait(NULL);
-    }
+    // }
 
-    // while(numRunning > 0);
+    while(numRunning > 0);
 
     printf("\n\n(OS) >>> ALL PROCESSES FINISHED.\n\n");
+
+    // for(int i = 0; i < N; i++) {
+    //     free_command_line(processes[i].command);
+    // }
+
+    // free(processes);
 
     for(int i = 0; i < N; i++) {
         for(int j = 0; processes[i].command[j] != NULL; j++) {
