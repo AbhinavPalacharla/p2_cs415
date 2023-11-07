@@ -114,10 +114,12 @@ void print_processes() {
 void processes_status_overview() {
     printf("\n------- PROCESSES: -------\n\n");
     for(int i = 0; i < N; i++) {
+        if(processes[i].status == 1) {continue;}
+        
         char *fpath;
         asprintf(&fpath, "/proc/%d/status", processes[i].pid);
 
-        printf("fpath: %s\n", fpath);
+        // printf("fpath: %s\n", fpath);
 
         FILE *f; 
         
