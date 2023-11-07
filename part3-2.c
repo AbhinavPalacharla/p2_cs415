@@ -88,6 +88,7 @@ void free_command_line(command_line* command)
 // int iters[N] = {8, 3, 13};
 int N = 0;
 int waiting = 0;
+int numRunning = 0;
 
 typedef struct Process {
     int pid;
@@ -249,9 +250,14 @@ int main() {
 
     /************************************************/
 
+    
+
     for(int i = 0; i < N; i++) {
-        waitpid(processes[i].pid, NULL, 0);
+        // waitpid(processes[i].pid, NULL, 0);
+        wait(NULL);
     }
+
+    // while(numRunning > 0);
 
     printf("\n\n(OS) >>> ALL PROCESSES FINISHED.\n\n");
 
