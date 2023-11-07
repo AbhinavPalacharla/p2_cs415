@@ -174,9 +174,9 @@ int main() {
 
     processes = malloc(sizeof(Process) * N);
 
-    for(int i = 0; i < N; i++) {
-        processes[i].command = malloc(sizeof(command_line));
-    }
+    // for(int i = 0; i < N; i++) {
+    //     processes[i].command = malloc(sizeof(command_line));
+    // }
 
     f = fopen("input.txt", "r");
 
