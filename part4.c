@@ -119,6 +119,8 @@ void processes_status_overview() {
 
         FILE *f = fopen(fpath, "r");
 
+        printf("Here");
+
         char *line = NULL;
         size_t len = 128;
         ssize_t read;
