@@ -83,7 +83,7 @@ void free_command_line(command_line* command)
 	free(command->command_list);
 }
 
-#define QUANTUM 5;
+#define QUANTUM 5
 
 int N = 0;
 int waiting = 0;
