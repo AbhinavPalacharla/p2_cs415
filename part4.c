@@ -8,6 +8,7 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 
+#define QUANTUM 2
 typedef struct {
     char** command_list;
     int num_token;
@@ -82,8 +83,6 @@ void free_command_line(command_line* command)
 
 	free(command->command_list);
 }
-
-#define QUANTUM 5
 
 int N = 0;
 int waiting = 0;
