@@ -6,6 +6,7 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+#include <assert.h>
 
 typedef struct {
     char** command_list;
