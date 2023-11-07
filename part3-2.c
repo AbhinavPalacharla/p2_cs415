@@ -258,7 +258,7 @@ int main() {
         // waitpid(processes[i].pid, NULL, 0);
     // }
 
-    while(numRunning > 0) {printf("Here\n");};
+    while(numRunning > 0);
 
     printf("\n\n(OS) >>> ALL PROCESSES FINISHED.\n\n");
 
