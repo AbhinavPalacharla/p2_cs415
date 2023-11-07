@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
         
         duration = (now - start)/(double) CLOCKS_PER_SEC;
         
-        printf("Duration: %f - Seconds: %d - condition: %d\n", duration, seconds, duration>=seconds);
+        // printf("Duration: %f - Seconds: %d - condition: %d\n", duration, seconds, duration>=seconds);
         
         if(duration >= seconds) {condition = 0;}
     }

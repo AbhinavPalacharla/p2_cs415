@@ -3,13 +3,19 @@
 #include <unistd.h>
 #include <signal.h>
 #include <time.h>
+#include <string.h>
 
 #define N 3
 #define QUANTUM 5
 
 int *pids;
+int *perm_pids;
 // int iters[N] = {27, 17, 37}; //2.7 sec, 1.7 sec, 3.7 sec | QUANTUM 2
-int iters[N] = {80, 30, 130}; //8sec, 3sec, 13sec | QUANTUM 5
+// int iters[N] = {80, 30, 130}; //8sec, 3sec, 13sec | QUANTUM 5
+// char *[N] = {"8", "3", "13"}; //8sec, 3sec, 13sec | QUANTUM 5
+
+int iters[N] = {8, 3, 13};
+
 int proc_status[N] = {0, 0, 0};
 // int iters[3] = {80, 80, 80};
 int first = 1;
@@ -42,6 +48,41 @@ void print_processes() {
 }
 
 void sigalrm_handler(int sig) {
+    int status;
+    pid_t child_pid;
+
+    printf("Checking if any processes have finished...\n");
+
+    for(int i = 0; i < N; i++) {
+        int child_pid = waitpid(perm_pids[i], &status, WNOHANG);
+
+        printf("Permpid: %d | Child pid val: %d\n", perm_pids[i], child_pid);
+
+        if(child_pid > 0) {
+            if(WIFEXITED(status)) {
+                printf("\n\nProcess Finished: %d\n\n", child_pid);
+                proc_status[i] = 1; //Mark process as finished
+                proc_finished_count++;
+            }
+        }
+    }
+
+    // Check if any child process has terminated
+    // while ((child_pid = waitpid(-1, &status, WNOHANG)) > 0) {
+    //     printf("Child PID: %d\n", child_pid);
+    //     if (WIFEXITED(status)) {
+    //         // A child process has exited, mark it as finished
+    //         printf("\n\n(SIGCHLHAND) >>> Process Finished: %d\n\n", child_pid);
+    //         for(int i = 0; i < N; i++) {
+    //             if(pids[i] == child_pid) {
+    //                 proc_status[0] = 1; //Mark process as finished
+    //                 proc_finished_count++;
+    //                 break;
+    //             }
+    //         }
+    //     }
+    // }
+
     if(proc_finished_count == N) {
         printf("All processes finished, skipping alarm.\n");
         return;
@@ -122,13 +163,15 @@ int main(int argc, char **argv) {
 
     signal(SIGALRM, sigalrm_handler);
     signal(SIGUSR2, sigusr2_handler);
-    signal(SIGCHLD, sigchld_handler);
+    // signal(SIGCHLD, sigchld_handler);
 
     pids = (int *) malloc(sizeof(int) * N);
+    perm_pids = (int *) malloc(sizeof(int) * N);
 
     //create child processes
     for(int i = 0; i < N; i++) {
         pids[i] = fork();
+        perm_pids[i] = pids[i];
 
         if(pids[i] == 0) {
             int j = 0;
@@ -142,16 +185,29 @@ int main(int argc, char **argv) {
 
             if(sigwait(&set, &sig) == 0) {
                 // printf("(%d) Doing Stuff...\n", getpid());
-                while((j++) < iters[i]) {
-                    printf("(%d) Process Executing... (%d/%d)\n", getpid(), j, iters[i]);
+                // while((j++) < iters[i]) {
+                //     printf("(%d) Process Executing... (%d/%d)\n", getpid(), j, iters[i]);
 
-                    //sleep for 1/10th of a second
-                    nanosleep(&ts, NULL);
+                //     //sleep for 1/10th of a second
+                //     nanosleep(&ts, NULL);
+                // }
+                // printf("(%d) Process Finished.\n", getpid());
+                // kill(getppid(), SIGCHLD);
+
+                // exit(0);
+                // execvp("./proc", (char *[]){"./proc", itoa((int)(iters[i]/10)), NULL});
+                switch(i) {
+                    case 0:
+                        execvp("./proc", (char *[]){"./proc", "8", NULL});
+                        break;
+                    case 1:
+                        execvp("./proc", (char *[]){"./proc", "3", NULL});
+                        break;
+                    case 2:
+                        execvp("./proc", (char *[]){"./proc", "13", NULL});
+                        break;
                 }
-                printf("(%d) Process Finished.\n", getpid());
-                kill(getppid(), SIGCHLD);
-
-                exit(0);
+                // execvp("./proc", (char *[]){"./proc", "8", NULL});
             }
         }
         else if(pids[i] < 0) {
@@ -172,7 +228,7 @@ int main(int argc, char **argv) {
 
     //wait for processes to finish
     for(int i = 0; i < N; i++) {
-        waitpid(pids[i], NULL, 0);
+        waitpid(perm_pids[i], NULL, 0);
         // wait(NULL);
     }
 
