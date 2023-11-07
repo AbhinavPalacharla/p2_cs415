@@ -250,8 +250,6 @@ int main() {
 
     /************************************************/
 
-    
-
     for(int i = 0; i < N; i++) {
         // waitpid(processes[i].pid, NULL, 0);
         wait(NULL);
@@ -260,12 +258,6 @@ int main() {
     // while(numRunning > 0);
 
     printf("\n\n(OS) >>> ALL PROCESSES FINISHED.\n\n");
-
-    // for(int i = 0; i < N; i++) {
-    //     free_command_line(processes[i].command);
-    // }
-
-    // free(processes);
 
     for(int i = 0; i < N; i++) {
         for(int j = 0; processes[i].command[j] != NULL; j++) {
