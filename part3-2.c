@@ -215,7 +215,7 @@ int main() {
     /*************************************************/
 
     for(int i = 0; i < N; i++) {
-        char *line = NULL; size_t len = 0; ssize_t read;
+        char *line = NULL; size_t len = 0;
 
         getline(&line, &len, f);
         command_line cl = str_filler(line, " ");
