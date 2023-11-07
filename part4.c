@@ -121,7 +121,7 @@ void processes_status_overview() {
 
         FILE *f; 
         
-        if(f = fopen(fpath, "r") == NULL) {
+        if((f = fopen(fpath, "r")) == NULL) {
             printf("Error opening file: %s\n", fpath);
             exit(1);
         }
