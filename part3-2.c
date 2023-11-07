@@ -93,7 +93,7 @@ int numRunning = 0;
 typedef struct Process {
     int pid;
     int status;
-    char **command;
+    // char **command;
 } Process;
 
 Process *processes = NULL;
@@ -153,8 +153,8 @@ void sigalrm_handler() {
     } while(processes[current_process].status == 1);
 
     //start next process
-    // printf("\n\n(OS) >>> (ID: %d) Process Resumed.\n\n", processes[current_process].pid);
-    printf("\n(OS) >>> (ID: %d) (CMD: %s) Process Started.\n\n", processes[current_process].pid, processes[current_process].command[0]);
+    printf("\n\n(OS) >>> (ID: %d) Process Resumed.\n\n", processes[current_process].pid);
+    // printf("\n(OS) >>> (ID: %d) (CMD: %s) Process Started.\n\n", processes[current_process].pid, processes[current_process].command[0]);
 
     kill(processes[current_process].pid, SIGCONT);
 
@@ -180,22 +180,22 @@ int main() {
 
     f = fopen("input.txt", "r");
 
-    for(int i = 0; (getline(&line, &len, f) != -1); i++) {
-        command_line *cl = malloc(sizeof(command_line));
-        *cl = str_filler(line, " "); // fill command list
-        // memcpy(processes[i].command, cl, sizeof(command_line));
+    // for(int i = 0; (getline(&line, &len, f) != -1); i++) {
+    //     command_line *cl = malloc(sizeof(command_line));
+    //     *cl = str_filler(line, " "); // fill command list
+    //     // memcpy(processes[i].command, cl, sizeof(command_line));
 
-        processes[i].command = malloc(sizeof(char*) * (cl->num_token + 1));
+    //     processes[i].command = malloc(sizeof(char*) * (cl->num_token + 1));
         
-        for(int j = 0; j < cl->num_token; j++) {
-            processes[i].command[j] = malloc(sizeof(char) * (strlen(cl->command_list[j]) + 1));
-            strcpy(processes[i].command[j], cl->command_list[j]);
-        }
+    //     for(int j = 0; j < cl->num_token; j++) {
+    //         processes[i].command[j] = malloc(sizeof(char) * (strlen(cl->command_list[j]) + 1));
+    //         strcpy(processes[i].command[j], cl->command_list[j]);
+    //     }
 
-        processes[i].command[cl->num_token] = NULL;
+    //     processes[i].command[cl->num_token] = NULL;
 
-        free_command_line(cl);
-    }
+    //     free_command_line(cl);
+    // }
 
 
     /************************************************/
@@ -215,6 +215,11 @@ int main() {
     /*************************************************/
 
     for(int i = 0; i < N; i++) {
+        char *line = NULL; size_t len = 0; ssize_t read;
+
+        getline(&line, &len, f);
+        command_line cl = str_filler(line, " ");
+
         processes[i].pid = fork();
 
         if(processes[i].pid == 0) {
@@ -228,15 +233,23 @@ int main() {
                 //     exit(1);
                 // }
 
-                if(execvp(processes[i].command[0], processes[i].command) != 0) {
-                    printf("Error executing command: %s\n", processes[i].command[0]);
+                // if(execvp(processes[i].command[0], processes[i].command) != 0) {
+                //     printf("Error executing command: %s\n", processes[i].command[0]);
+                //     exit(1);
+                // }
+
+                if(execvp(cl.command_list[0], cl.command_list) != 0) {
+                    printf("Error executing command: %s\n", cl.command_list[0]);
                     exit(1);
                 }
+
             }
         } else if(processes[i].pid < 0) {
             printf("Error creating process %d\n", i);
             exit(1);
         }
+
+        free_command_line(&cl);
     }
     /************************************************/
 
@@ -251,7 +264,8 @@ int main() {
 
     // while(waiting < N);
 
-    printf("\n(OS) >>> (ID: %d) (CMD: %s) Process Started.\n\n", processes[current_process].pid, processes[current_process].command[0]);
+    // printf("\n(OS) >>> (ID: %d) (CMD: %s) Process Started.\n\n", processes[current_process].pid, processes[current_process].command[0]);
+    printf("\n(OS) >>> (ID: %d) Process Started.\n\n", processes[current_process].pid);
 
     kill(processes[current_process].pid, SIGCONT);
 
@@ -273,13 +287,13 @@ int main() {
 
     // free(processes);
 
-    for(int i = 0; i < N; i++) {
-        for(int j = 0; processes[i].command[j] != NULL; j++) {
-            free(processes[i].command[j]);
-        }
+    // for(int i = 0; i < N; i++) {
+    //     for(int j = 0; processes[i].command[j] != NULL; j++) {
+    //         free(processes[i].command[j]);
+    //     }
 
-        free(processes[i].command);
-    }
+    //     free(processes[i].command);
+    // }
 
     free(processes);
 
