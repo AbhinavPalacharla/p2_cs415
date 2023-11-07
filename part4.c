@@ -175,6 +175,13 @@ void sigusr2_handler() {
 }
 
 void sigalrm_handler() {
+
+    /*************************************************/
+
+    //process overview
+    processes_status_overview();
+
+    /*************************************************/
     
     //stop current process
     kill(processes[current_process].pid, SIGSTOP);
@@ -201,13 +208,6 @@ void sigalrm_handler() {
             }
         }
     }
-
-    /*************************************************/
-
-    //process overview
-    processes_status_overview();
-
-    /*************************************************/
 
     //move to next process
     do {
