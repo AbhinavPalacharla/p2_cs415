@@ -11,6 +11,8 @@ int main(int argc, char **argv) {
 
     FILE *f = fopen(input_file, "r");
 
+    printf("File opened");
+
     size_t len = 128; char *line = malloc(sizeof(char) * len); ssize_t read;
     
     int N = 0;
