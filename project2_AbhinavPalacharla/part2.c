@@ -38,7 +38,7 @@ int main(int argc, char **argv) {
         if(pids[i] == 0) {
             printf("Waiting...\n");
             if(sigwait(&set, &sig) == 0) {
-                printf("Executing Command: %s\n", cl.command_list[0]);
+                printf("\nExecuting Command: %s\n", cl.command_list[0]);
                 if(execvp(cl.command_list[0], cl.command_list) != 0) {
                     printf("Error executing command: %s\n", cl.command_list[0]);
                     exit(1);
@@ -58,9 +58,11 @@ int main(int argc, char **argv) {
     //send signal to all processes
     for(int i = 0; i < N; i++) {
         sleep(3);
-        printf("Sending signal to %d\n", pids[i]);
+        printf("\nSending signal to %d\n", pids[i]);
         kill(pids[i], SIGUSR1);
     }
+
+    printf("\n\n");
 
     //suspend child processes
     for(int i = 0; i < N; i++) {
