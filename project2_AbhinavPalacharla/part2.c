@@ -20,6 +20,8 @@ int main(int argc, char **argv) {
     sigemptyset(&set);
     sigaddset(&set, SIGUSR1);
 
+    sigprocmask(SIG_BLOCK, &set, NULL);
+
     for(; (read = getline(&line, &len, f)) != -1; N++);
 
     fseek(f, 0, SEEK_SET);
