@@ -9,6 +9,8 @@
 int main(int argc, char **argv) {
     char *input_file = argv[1];
 
+    printf("Input file: %s\n", input_file);
+
     FILE *f = fopen(input_file, "r");
 
     printf("File opened");
