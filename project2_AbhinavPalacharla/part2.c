@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
+#include <sys/wait.h>
 #include "MCP.h"
 
 
@@ -19,7 +20,7 @@ int main(int argc, char **argv) {
     sigemptyset(&set);
     sigaddset(&set, SIGUSR1);
 
-    for(; (read = getline(&line, &len, stdin)) != -1; N++);
+    for(; (read = getline(&line, &len, f)) != -1; N++);
 
     fseek(f, 0, SEEK_SET);
 
@@ -78,6 +79,6 @@ int main(int argc, char **argv) {
 
     free(pids);
 
-    fclose(input_file);
+    fclose(f);
     return 0;
 }
