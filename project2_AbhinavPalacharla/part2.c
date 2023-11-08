@@ -51,6 +51,8 @@ int main(int argc, char **argv) {
             printf("Error creating child process.\n");
             exit(1);
         }
+
+        free_command_line(&cl);
     }
 
     free(line);
