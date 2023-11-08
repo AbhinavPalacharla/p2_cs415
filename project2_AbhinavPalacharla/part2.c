@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
     for(int i = 0; i < N; i++) {
         getline(&line, &len, f);
         command_line cl = str_filler(line, " ");
-
+        printf("Command: %s\n", cl.command_list[0]);
         pids[i] = fork();
 
         if(pids[i] == 0) {
