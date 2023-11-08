@@ -5,8 +5,7 @@
 #include <time.h>
 
 int *pids;
-// int iters[3] = {10, 6, 16};
-int iters[3] = {80, 80, 80};
+int iters[3] = {10, 6, 16};
 int N = 3;
 int first = 1;
 int waiting = 0;
@@ -69,8 +68,7 @@ int main(int argc, char **argv) {
             int j = 0;
             struct timespec ts;
             ts.tv_sec = 0;
-            ts.tv_nsec = 100000000;
-            // ts.tv_nsec = 500000000;
+            ts.tv_nsec = 500000000;
             
             printf("(%d) Waiting...\n", getpid());
             // kill(getppid(), SIGUSR2);
