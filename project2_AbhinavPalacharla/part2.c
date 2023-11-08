@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
         getline(&line, &len, f);
         command_line cl = str_filler(line, " ");
 
-
+        printf("Here");
         pids[i] = fork();
 
         if(pids[i] == 0) {
