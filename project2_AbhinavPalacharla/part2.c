@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
         if(pids[i] == 0) {
             printf("Waiting...\n");
             if(sigwait(&set, &sig) == 0) {
-
+                printf("Executing Command: %s\n", cl.command_list[0]);
                 if(execvp(cl.command_list[0], cl.command_list) != 0) {
                     printf("Error executing command: %s\n", cl.command_list[0]);
                     exit(1);
