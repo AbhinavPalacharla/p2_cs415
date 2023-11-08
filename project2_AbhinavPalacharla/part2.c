@@ -9,11 +9,7 @@
 int main(int argc, char **argv) {
     char *input_file = argv[1];
 
-    printf("Input file: %s\n", input_file);
-
     FILE *f = fopen(input_file, "r");
-
-    printf("File opened");
 
     size_t len = 128; char *line = malloc(sizeof(char) * len); ssize_t read;
     
@@ -34,11 +30,11 @@ int main(int argc, char **argv) {
     for(int i = 0; i < N; i++) {
         getline(&line, &len, f);
         command_line cl = str_filler(line, " ");
-        printf("Command: %s\n", cl.command_list[0]);
+
         pids[i] = fork();
 
         if(pids[i] == 0) {
-
+            printf("Waiting...\n");
             if(sigwait(&set, &sig) == 0) {
 
                 if(execvp(cl.command_list[0], cl.command_list) != 0) {

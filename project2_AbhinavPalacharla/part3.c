@@ -111,7 +111,7 @@ int main(int argc, char **argv) {
         processes[i].pid = fork();
 
         if(processes[i].pid == 0) {
-            kill(getppid(), SIGUSR2);
+            // kill(getppid(), SIGUSR2);
 
             if(sigwait(&set, &sig) == 0) {
                 if(execvp(cl.command_list[0], cl.command_list) != 0) {
