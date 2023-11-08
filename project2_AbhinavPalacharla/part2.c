@@ -60,29 +60,23 @@ int main(int argc, char **argv) {
         sleep(3);
         printf("\nSending signal to %d\n", pids[i]);
         kill(pids[i], SIGUSR1);
-        sleep(3);
-        printf("(%d) Suspending...\n", pids[i]);
-        kill(pids[i], SIGSTOP);
-        sleep(3);
-        printf("(%d) Resuming...\n", pids[i]);
-        kill(pids[i], SIGCONT);
     }
 
     printf("\n\n");
 
-    // //suspend child processes
-    // for(int i = 0; i < N; i++) {
-    //     sleep(3);
-    //     printf("(%d) Suspending...\n", pids[i]);
-    //     kill(pids[i], SIGSTOP);
-    // }
+    //suspend child processes
+    for(int i = 0; i < N; i++) {
+        sleep(3);
+        printf("\n(%d) Suspending...\n", pids[i]);
+        kill(pids[i], SIGSTOP);
+    }
 
-    // //resume child processes
-    // for(int i = 0; i < N; i++) {
-    //     sleep(3);
-    //     printf("(%d) Resuming...\n", pids[i]);
-    //     kill(pids[i], SIGCONT);
-    // }
+    //resume child processes
+    for(int i = 0; i < N; i++) {
+        sleep(3);
+        printf("\n(%d) Resuming...\n", pids[i]);
+        kill(pids[i], SIGCONT);
+    }
 
     //wait for processes to finish
     for(int i = 0; i < N; i++) {
