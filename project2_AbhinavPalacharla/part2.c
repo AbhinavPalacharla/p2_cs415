@@ -56,6 +56,7 @@ int main(int argc, char **argv) {
     //send signal to all processes
     for(int i = 0; i < N; i++) {
         sleep(3);
+        printf("Sending signal to %d\n", pids[i]);
         kill(pids[i], SIGUSR1);
     }
 
