@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
         pids[i] = fork();
 
         if(pids[i] == 0) {
-            printf("Waiting...\n");
+            printf("(%d) Waiting...\n", getpid());
             if(sigwait(&set, &sig) == 0) {
                 printf("\nExecuting Command: %s\n", cl.command_list[0]);
                 if(execvp(cl.command_list[0], cl.command_list) != 0) {
@@ -78,8 +78,7 @@ int main(int argc, char **argv) {
 
     //wait for processes to finish
     for(int i = 0; i < N; i++) {
-        // waitpid(pids[i], NULL, 0);
-        wait(NULL);
+        waitpid(pids[i], NULL, 0);
     }
 
     free(pids);
