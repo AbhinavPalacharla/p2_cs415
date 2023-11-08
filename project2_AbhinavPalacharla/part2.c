@@ -22,6 +22,8 @@ int main(int argc, char **argv) {
 
     for(; (read = getline(&line, &len, f)) != -1; N++);
 
+    printf("Here");
+
     fseek(f, 0, SEEK_SET);
 
     int *pids = malloc(sizeof(int) * N);
