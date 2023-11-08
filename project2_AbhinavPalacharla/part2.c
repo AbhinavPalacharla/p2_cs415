@@ -26,8 +26,6 @@ int main(int argc, char **argv) {
 
     for(; (read = getline(&line, &len, f)) != -1; N++);
 
-    printf("Here");
-
     fseek(f, 0, SEEK_SET);
 
     int *pids = malloc(sizeof(int) * N);
@@ -37,7 +35,6 @@ int main(int argc, char **argv) {
         getline(&line, &len, f);
         command_line cl = str_filler(line, " ");
 
-        printf("Here");
         pids[i] = fork();
 
         if(pids[i] == 0) {
@@ -80,7 +77,8 @@ int main(int argc, char **argv) {
 
     //wait for processes to finish
     for(int i = 0; i < N; i++) {
-        waitpid(pids[i], NULL, 0);
+        // waitpid(pids[i], NULL, 0);
+        wait(NULL);
     }
 
     free(pids);
